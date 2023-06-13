@@ -6,7 +6,7 @@ def get_guesses():
     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
     numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
     possible_guesses = [letter + number for letter in letters for number in numbers]
-    return possible_guesses
+    return np.array(possible_guesses)
 
 def get_ships():
     ships = {"ship1" : 5, 
@@ -17,7 +17,5 @@ def get_ships():
     return ships
 
 def get_grid():
-    grid = []
-    for _ in range(10):
-        grid.append([' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '])
-    return np.array(grid)
+    return get_guesses().reshape(10,10)
+
