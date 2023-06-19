@@ -13,12 +13,9 @@ def get_positions(grid, ships, previous):
     flat_positions = [pos for i in positions for pos in i]
     return flat_positions
 
-def guess(grid_color, ships, previous):
-    coords = [coord for coord in grid_color.keys()]
+def guess(grid_colors, ships, previous):
+    coords = [coord for coord in grid_colors.keys()]
     grid = [list(coords[i:i+10]) for i in range(0, 100, 10)]
-
-    for i in grid:
-        print(i)
 
     transposed_grid = list(map(list, zip(*grid)))
     horizontal = get_positions(grid, ships, previous)
