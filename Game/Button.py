@@ -5,6 +5,7 @@ class Button:
         self.rect = pygame.Rect(x, y, width, height)
         self.color = color
         self.text = text
+        self.start = False
         self.font = pygame.font.Font(None, 32)
 
     def place_button(self, surface):
@@ -16,6 +17,7 @@ class Button:
     def button_event(self, event, ships):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and self.rect.collidepoint(event.pos):
+                self.start = True
                 # for ship in ships:
                 #     ship.check_location()
-                print("button")
+                print(self.start)
