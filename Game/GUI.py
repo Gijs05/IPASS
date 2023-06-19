@@ -27,22 +27,10 @@ def conversion(column_row, width_height, line_width):
 
 def draw_grid(grid_size, window, resolution, line_width, grid_color, coordinates):
     square_size = get_square_size(resolution, grid_size, line_width)
-    color = (50, 50, 50)
-    for coordinate in grid_color:
-        if coordinate in coordinates:
-            color = (0, 0, 225)
-
+    for coordinate, color in grid_color.items():
         row, column = coordinate
         width = conversion(column, square_size[1], line_width)
         height = conversion(row, square_size[1], line_width)
         geometry = (width, height, square_size[1], square_size[1])
         pygame.draw.rect(window, color, geometry)
 
-def get_position(line_width, resolution, grid_size):
-    position = pygame.mouse.get_pos()
-    width, height = get_square_size(resolution, grid_size, line_width)
-
-    column = position[0] // (width + line_width)
-    row = position[1] // (height  + line_width)
-
-    return column, row
