@@ -1,10 +1,6 @@
 import numpy as np
 from collections import Counter
 
-grid_colors = {(col, row): (50, 50, 50) for row in range(10) for col in range(10)}
-previous = [(4, 4)]
-# grid_colors[(4, 6)] = (225, 0, 0)
-
 def get_surrounding(coordinate, grid):
     surrounding_hor = [row[coord] for row in grid for coord in range(len(row) - 1) if row[coord - 1] == coordinate or row[coord + 1] == coordinate]
    
@@ -36,10 +32,5 @@ def guess(previous, grid_colors, coordinate):
     most_common = Counter(possible).most_common(1)[0][0]
     return most_common, possible
 
-
-coords = [coord for coord in grid_colors.keys()]
-grid = [list(coords[i:i+10]) for i in range(0, 100, 10)]
-
-print(guess(previous, grid_colors, (4, 5)))
 
 
