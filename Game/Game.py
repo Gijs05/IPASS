@@ -1,7 +1,8 @@
 import pygame 
 import GUI
 from Button import Button
-from  Ships import Ship
+from Ships import Ship
+import Grid
 
 def start_game():
     window, resolution, grid_size, line_width = GUI.get_info()
@@ -13,38 +14,41 @@ def start_game():
 
     ships = [ship1, ship2]
     coordinates = []
-
+    grid_colors = {(col, row): (50, 50, 50) for row in range(10) for col in range(10)}
+    Turn = True
+    # een lijst met keys
+    previous = []
+    
     while True:
-        grid_colors = [(row, col) for row in range(10) for col in range(10)]
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                pos = GUI.get_position(line_width, resolution, grid_size)
-                print(pos)
-        
-        window.fill((225, 225, 225))  
+                if event.button == 1 and button.start == True:
+                    pos = Grid.get_position(square_height)
+                   
+                    if Grid.check_hit(pos, grid_colors):
+                        grid_colors[pos] = (225, 0, 0)
+                    else:
+                        grid_colors[pos] = (225, 225, 225)
+
+                    previous.append(False)
+                    Turn = False
+                    
+        window.fill((225,225,225))  
         GUI.draw_grid(grid_size, window, resolution, line_width, grid_colors, coordinates)
 
         button.button_event(event, ships)
         ship1.ship_event(event, square_height)
         ship2.ship_event(event, square_height)
-        start_col = int(ship1.rect.x // square_height)
-        start_row = int(ship1.rect.y // square_height)
-        end_col = int((ship1.rect.x + ship1.rect.width - 1) // square_height)
-        end_row = int((ship1.rect.y + ship1.rect.height - 1) // square_height)
-
-        coordinates = []
-        for row in range(start_row, end_row + 1):
-            for col in range(start_col, end_col + 1):
-                coordinates.append((col, row))
-        print(coordinates)
-
+        
         button.place_button(window) 
         ship1.place_ship(window)
         ship2.place_ship(window)
+
+
         # # print(int(ship1.rect.x // 10), int(ship1.rect.y // 10), int((ship1.rect.x + ship1.rect.width) // 10), int((ship1.rect.y + ship1.rect.height) // 10))
         # start_col = int(ship1.rect.x // 10)
         # start_row = int(ship1.rect.y // 10)
@@ -56,7 +60,7 @@ def start_game():
         #     for col in range(start_col, end_col + 1):
         #         coordinates.append((row, col))
         
-
+        
         coordinates = [ship1, ship2]
         pygame.display.flip()  
         
