@@ -1,36 +1,45 @@
 import numpy as np
 from collections import Counter
-import Game.Board as Board
+
+grid_colors = {(col, row): (50, 50, 50) for row in range(10) for col in range(10)}
+previous = [(4, 4)]
+# grid_colors[(4, 6)] = (225, 0, 0)
 
 def get_surrounding(coordinate, grid):
     surrounding_hor = [row[coord] for row in grid for coord in range(len(row) - 1) if row[coord - 1] == coordinate or row[coord + 1] == coordinate]
-    surrounding_ver = [collumn[coord] for collumn in np.array(grid).T for coord in range(len(list(collumn)) - 1) if list(collumn)[coord - 1] == coordinate or list(collumn)[coord + 1] == coordinate]
+   
+    surrounding_ver = [collumn[coord] for collumn in list(map(list, zip(*grid))) for coord in range(len(list(collumn)) - 1) if list(collumn)[coord - 1] == coordinate or list(collumn)[coord + 1] == coordinate]
     surrounding_coordinates = [coord for coordinates in [surrounding_hor, surrounding_ver] for coord in coordinates]
 
-    viable_coordinates = []
-    for i in surrounding_coordinates:
-        for x in grid:
-            if i in x:
-                viable_coordinates.append(i)
+    viable_coordinates = [surround for surround in surrounding_coordinates for coord in grid if surround in coord]
     return viable_coordinates
     
-def get_possibilities(coordinate, grid):
-    flat_grid = list(np.array(grid).flatten())
-    hits = [Board.get_guesses()[coord] for coord in range(len(flat_grid)) if flat_grid[coord] == 'x']
-    possible = [get_surrounding(coordinate, Board.get_grid(Board.get_guesses()))]
+def get_possibilities(coordinate, grid, grid_colors):
+    hits = [coord for row in grid for coord in row if grid_colors[coord] == (225, 0, 0)]
+    possible = [get_surrounding(coordinate, grid)]
     for possibility in hits:
         possible.append(get_surrounding(possibility, grid))
-     
+
     flat = []
     for row in possible:
         [flat.append(coord) for coord in row]
     return flat
 
 
-def guess(possible, previous):
-    new_possible = []
-    for coord in possible:
-        if coord not in previous:
-            new_possible.append(coord)
-    most_common = Counter(list(np.array(new_possible))).most_common(1)        
-    return most_common[0][0]
+def guess(previous, grid_colors, coordinate):
+    coords = [coord for coord in grid_colors.keys()]
+    grid = [list(coords[i:i+10]) for i in range(0, 100, 10)]
+    possible = get_possibilities(coordinate, grid, grid_colors)
+    possible.remove(previous[-1]) 
+
+    print(possible)
+    most_common = Counter(possible).most_common(1)[0][0]
+    return most_common, possible
+
+
+coords = [coord for coord in grid_colors.keys()]
+grid = [list(coords[i:i+10]) for i in range(0, 100, 10)]
+
+print(guess(previous, grid_colors, (4, 5)))
+
+
