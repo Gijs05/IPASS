@@ -1,28 +1,33 @@
 import numpy as np
 from collections import Counter
 
-def get_positions(grid, ships):
+def get_positions(grid, ships, previous):
     max_length = max(ships.values())
     positions = []
     #kijk van waar naar waar het schip geplaatst kan worden. Pak vervolgens de meest overeenkomende.
     for lst_number in range(len(grid)):
         row = grid[lst_number]
         for position in row:
-            if (row.index(position) + max_length) < len(row) and '-' not in row[row.index(position) : row.index(position) + max_length]: #or 'x' not in row[row.index(position) : row.index(position) + max_length]:
+            if (row.index(position) + max_length) < len(row) + 1 and all(item not in previous for item in row[row.index(position):row.index(position) + max_length]): 
                 positions.append(row[row.index(position) : row.index(position) + max_length])
-    return positions
+    flat_positions = [pos for i in positions for pos in i]
+    return flat_positions
 
-def guess(grid, ships, previous):
-    transposed_grid = np.array(grid).T
-    reversed_grid = [list(row) for row in transposed_grid]
-    horizontal = get_positions(grid, ships)
-    vertical = get_positions(reversed_grid, ships)
+def guess(grid_color, ships, previous):
+    coords = [coord for coord in grid_color.keys()]
+    grid = [list(coords[i:i+10]) for i in range(0, 100, 10)]
+
+    for i in grid:
+        print(i)
+
+    transposed_grid = list(map(list, zip(*grid)))
+    horizontal = get_positions(grid, ships, previous)
+    vertical = get_positions(transposed_grid, ships, previous)
     [horizontal.append(pos) for pos in vertical]
 
-    flat = list(np.array(horizontal).flatten())
-    for coord in flat:
+    for coord in horizontal:
         if coord in previous:
-            flat.remove(coord)
+            horizontal.remove(coord)
+    most_common = Counter(horizontal).most_common(1)[0][0]
+    return most_common
 
-    most_common = Counter(list(np.array(flat))).most_common(1)
-    return most_common[0][0]
