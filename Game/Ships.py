@@ -60,12 +60,6 @@ class Ship:
                 self.rect.x = max(0, min(self.rect.x, max_x) + 10)
                 self.rect.y = max(0, min(self.rect.y, max_y) + 10)
         
-def check_hit(coordinate, ship_locations):
-    locations = [coord for ship in ship_locations for coord in ship]
-    if str(coordinate) in locations:
-        return True
-    return False
-
 def check_sink(coordinate, ship_locations):
     old_ships = copy.deepcopy(ship_locations)
 
