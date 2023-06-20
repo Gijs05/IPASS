@@ -25,7 +25,7 @@ def conversion(column_row, width_height, line_width):
     convert = line_width * (column_row + 1) + width_height * column_row
     return convert
 
-def draw_grid(grid_size, window, resolution, line_width, grid_color, coordinates):
+def draw_grid(grid_size, window, resolution, line_width, grid_color):
     square_size = get_square_size(resolution, grid_size, line_width)
     for coordinate, color in grid_color.items():
         row, column = coordinate
