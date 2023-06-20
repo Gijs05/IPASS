@@ -14,4 +14,5 @@ def get_position(square_size):
     position = pygame.mouse.get_pos()
     column = position[0] // square_size
     row = position[1] // square_size
-    return column, row
+    return row, column
+
