@@ -1,8 +1,8 @@
-import numpy as np
 from collections import Counter
 
 def get_positions(grid, ships, previous):
-    max_length = max(ships.values())
+    ship_values = [len(value) for value in ships.values()]
+    max_length = max(ship_values)
     positions = []
     #kijk van waar naar waar het schip geplaatst kan worden. Pak vervolgens de meest overeenkomende.
     for lst_number in range(len(grid)):

@@ -22,10 +22,11 @@ def get_possibilities(grid, grid_colors):
     return flat
 
 
-def guess(previous, grid_colors, coordinate):
+def guess(previous, grid_colors):
     coords = [coord for coord in grid_colors.keys()]
     grid = [list(coords[i:i+10]) for i in range(0, 100, 10)]
     possible = get_possibilities(grid, grid_colors)
+    print(possible)
     if previous[-1] in possible:
         possible.remove(previous[-1]) 
     most_common = Counter(possible).most_common(1)[0][0]
