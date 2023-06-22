@@ -8,24 +8,32 @@
 
 from Algorithm import HuntingMode 
 from Algorithm import TargetMode
+import copy
 
-def choose_mode(result, grid_colors, ships, previous):
-    sinking = False
-    if result:
-        sinking = True
-
+def choose_mode(result, grid_colors, ships, previous, sinking, possible):
     if sinking:
-       return HuntingMode.guess(previous, grid_colors), sinking
-    
+       if result:
+            new_guess = HuntingMode.guess(previous, grid_colors, result, possible)
+            new_possible = new_guess[1]
+            [possible.append(new) for new in new_possible]
+            return new_guess[0], possible
+       
+       else:
+           new_guess = HuntingMode.guess(previous, grid_colors, result, possible)
+           return new_guess[0], new_guess[1]
+
     elif sinking == False:
-       return TargetMode.guess(grid_colors, ships, previous), sinking
+       return TargetMode.guess(grid_colors, ships, previous), possible
+
+def remove_ships(old_ships, coordinate):
+    sink = False
+    copy_ships = copy.deepcopy(old_ships)
+    for name, coordinates in old_ships.items():
+        if coordinate in coordinates:
+            coordinates.remove(coordinate)
+            old_ships[name] = coordinates
     
-# grid_colors = {(col, row): (50, 50, 50) for row in range(10) for col in range(10)}
-# grid_colors[(4, 4)] = (225, 0, 0)
-# ships = {"ship1" : 5, 
-#             "ship2" : 4, 
-#             "ship3" : 3,
-#             "ship4" : 3,
-#             "ship5" : 2}
-# print(choose_mode(True, grid_colors, ships, [(4, 4)]))
-    
+    for name in old_ships.keys():
+        if len(copy_ships[name]) != len(old_ships[name]) and len(old_ships[name]) == 0:
+            sink = True
+    return old_ships, sink
