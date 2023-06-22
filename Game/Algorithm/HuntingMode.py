@@ -1,4 +1,3 @@
-import numpy as np
 from collections import Counter
 
 def get_surrounding(coordinate, grid):
@@ -15,20 +14,26 @@ def get_possibilities(grid, grid_colors):
     possible = []
     for possibility in hits:
         possible.append(get_surrounding(possibility, grid))
-    print(possible)
+
     flat = []
     for row in possible:
         [flat.append(coord) for coord in row]
     return flat
 
 
-def guess(previous, grid_colors):
+def guess(previous, grid_colors, result, possible):
     coords = [coord for coord in grid_colors.keys()]
     grid = [list(coords[i:i+10]) for i in range(0, 100, 10)]
-    possible = get_possibilities(grid, grid_colors)
+
+    if result:
+        new_possible = get_possibilities(grid, grid_colors)
+        new_possible = [new for new in new_possible if new not in previous]
+        most_common = Counter(new_possible).most_common(1)[0][0]
+        return most_common, new_possible
+    
+    if len(previous) != 0:
+        possible.remove(previous[-1])
     print(possible)
-    if previous[-1] in possible:
-        possible.remove(previous[-1]) 
     most_common = Counter(possible).most_common(1)[0][0]
     return most_common, possible
 
