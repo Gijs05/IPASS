@@ -6,24 +6,43 @@
 # Kijk naar de lengte van het langste schip. Probeer dan een inschatting te maken wat de beste plek is om te gokken waar de meeste mogelijkheden zouden liggen voor een hit. 
 # Elke keer als er een schip zinkt haal een schip uit de dict
 
-from Algorithm import HuntingMode 
-from Algorithm import TargetMode
+import HuntingMode
+import TargetMode
 import copy
 
-def choose_mode(result, grid_colors, ships, previous, sinking, possible):
-    if sinking:
-       if result:
-            new_guess = HuntingMode.guess(previous, grid_colors, result, possible)
-            new_possible = new_guess[1]
-            [possible.append(new) for new in new_possible]
-            return new_guess[0], possible
-       
-       else:
-           new_guess = HuntingMode.guess(previous, grid_colors, result, possible)
-           return new_guess[0], new_guess[1]
+POSSIBLE = None
+PREVIOUS_WAY = None
+HIT = False
+SINKING = False
 
-    elif sinking == False:
-       return TargetMode.guess(grid_colors, ships, previous), possible
+def choose_mode(result, grid_colors, ships, previous):
+    global POSSIBLE, HIT, SINKING
+
+    if result or SINKING:
+        SINKING = True
+        if HIT == False:
+            POSSIBLE = HuntingMode.get_all_possibilities(previous[-1], grid_colors)
+            HIT = True
+        print(POSSIBLE)
+        # if result:
+        #     HuntingMode.guess(POSSIBLE)
+
+        
+
+
+    # if sinking:
+    #    if result:
+    #         new_guess = HuntingMode.guess(previous, grid_colors, result, possible)
+    #         new_possible = new_guess[1]
+    #         [possible.append(new) for new in new_possible]
+    #         return new_guess[0], possible
+       
+    #    else:
+    #        new_guess = HuntingMode.guess(previous, grid_colors, result, possible)
+    #        return new_guess[0], new_guess[1]
+
+    elif SINKING == False:
+       return TargetMode.guess(grid_colors, ships, previous)
 
 def remove_ships(old_ships, coordinate):
     sink = False
@@ -37,3 +56,4 @@ def remove_ships(old_ships, coordinate):
         if len(copy_ships[name]) != len(old_ships[name]) and len(old_ships[name]) == 0:
             sink = True
     return old_ships, sink
+
