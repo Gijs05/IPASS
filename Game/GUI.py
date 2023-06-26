@@ -7,17 +7,17 @@ def get_info():
     # Get screen info
     os.environ['SDL_VIDEO_CENTERED'] = '1'
     screen = pygame.display.Info()
-    screen_width, screen_height = screen.current_w - 100, screen.current_h - 205
+    screen_width, screen_height = screen.current_w, screen.current_h - 70
     window = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
     pygame.display.set_caption("Battleship")
 
     resolution = (screen_width, screen_height)
-    grid_size = (23, 10)  
+    grid_size = (21, 12)  
     line_width = 1
     return window, resolution, grid_size, line_width
 
 def get_square_size(resolution, grid_size, line_width):
-    square_width = ((resolution[0]) / grid_size[0]) - line_width * ((grid_size[0] + 1) / grid_size[0])
+    square_width = (resolution[0] / grid_size[0]) - line_width * ((grid_size[0] + 1) / grid_size[0])
     square_height = (resolution[1] / grid_size[1]) - line_width * ((grid_size[1] + 1) / grid_size[1])
     return (square_width, square_height)
 
@@ -30,7 +30,7 @@ def draw_grid(grid_size, window, resolution, line_width, grid_color):
     for coordinate, color in grid_color.items():
         row, column = coordinate
         width = conversion(column, square_size[0], line_width)
-        height = conversion(row, square_size[0], line_width)
-        geometry = (width, height, square_size[0], square_size[0])
+        height = conversion(row, square_size[1], line_width)
+        geometry = (width, height, square_size[0], square_size[1])
         pygame.draw.rect(window, color, geometry)
 
