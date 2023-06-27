@@ -1,4 +1,5 @@
 from collections import Counter
+import random
 
 def get_positions(grid, ships, previous):
     ship_values = [len(value) for value in ships.values()]
@@ -26,8 +27,11 @@ def guess(grid_colors, ships, previous):
     for coord in horizontal:
         if coord in previous:
             horizontal.remove(coord)
-    most_common = Counter(horizontal).most_common(1)[0][0]
-    previous.append(most_common)
-    return most_common, previous
+    # print(horizontal)
+    most_common = Counter(horizontal)
+    max_value = max(most_common.values())
+    guess = random.choice([(coord, value) for coord, value in most_common.items() if value == max_value])
+    previous.append(guess[0])
+    return guess[0], previous
 
 

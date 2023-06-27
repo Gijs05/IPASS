@@ -1,5 +1,13 @@
+import numpy as np
 
 def get_surrounding(coordinate, grid):
+    reversed_grid = []
+    for row in grid:
+        coords = []
+        for coord in row:
+            coords.append(tuple(reversed(coord)))
+        reversed_grid.append(coords)
+
     surrounding_hor = [row[coord] for row in grid for coord in range(len(row) - 1) if row[coord - 1] == coordinate or row[coord + 1] == coordinate]  
     surrounding_ver = [collumn[coord] for collumn in list(map(list, zip(*grid))) for coord in range(len(collumn) - 1) if collumn[coord - 1] == coordinate or collumn[coord + 1] == coordinate] 
     surrounding_coordinates = [coord for coordinates in [surrounding_hor, surrounding_ver] for coord in coordinates]
@@ -9,9 +17,11 @@ def get_surrounding(coordinate, grid):
 def get_options(coordinate, grid):
     surrounding = get_surrounding((coordinate), grid)
     ways = [(coord[0] - coordinate[0], coord[1] - coordinate[1]) for coord in surrounding]
-    
+
     sides = {}
     for option in ways:
+        if option[0] != 0 and option[1] != 0:
+            continue
         public_index = ways.index(option)
         if option[0] < 0:
             sides[option] = surrounding[public_index]
@@ -50,25 +60,26 @@ def get_all_possibilities(coordinate, grid_colors):
     return all_coords, ver, hor
 
 def guess(possibilities, reserve, index, previous, result):
-    for i in possibilities:
-        if len(i) == 0:
-            possibilities.remove(i)
+    possibilities = [row for row in possibilities if len(row) != 0]
 
     if index == None:
         max_value = max(possibilities)
         index = possibilities.index(max_value)  
-        
+    
     elif result == False:
         if len(possibilities) >= index + 1:
             possibilities.pop(index)
         if len(possibilities) == 0:
+            # print(possibilities, index, reserve)
             possibilities = reserve
             max_value = max(possibilities)
             index = possibilities.index(max_value)
-
+        
         else:
             index = 0
-
+    if len(possibilities) <= index + 1:
+        index = 0
+    # print(possibilities[index], index, reserve)
     guess = possibilities[index][0]
     possibilities[index].remove(guess)
     previous.append(guess)

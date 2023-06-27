@@ -13,6 +13,7 @@ def surrounding(grid, coordinate, ship_length):
 def Ship_placement(grid2):
     ship_length = [5, 4, 3, 3, 2, 1]
     ship_coordinates = {}
+    
     for count in range(1, 7):
         coordinate = random.choice(list(grid2.keys()))
         ship_coords = surrounding(grid2, coordinate, ship_length[0])
