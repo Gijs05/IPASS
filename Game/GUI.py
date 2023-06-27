@@ -7,7 +7,7 @@ def get_info():
     # Get screen info
     os.environ['SDL_VIDEO_CENTERED'] = '1'
     screen = pygame.display.Info()
-    screen_width, screen_height = screen.current_w, screen.current_h - 70
+    screen_width, screen_height = screen.current_w, screen.current_h - 50
     window = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
     pygame.display.set_caption("Battleship")
 

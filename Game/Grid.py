@@ -17,5 +17,7 @@ def check_mine(coordinate, grid_colors):
         return True
     else:
         return False
+    
+
 
 
