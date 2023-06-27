@@ -1,6 +1,5 @@
 import random
-import HuntingMode
-
+import Algorithm.HuntingMode as HuntingMode
 
 def surrounding(grid, coordinate, ship_length):
     possible = HuntingMode.get_all_possibilities(coordinate, grid)
@@ -19,12 +18,7 @@ def Ship_placement(grid2):
         ship_coords = surrounding(grid2, coordinate, ship_length[0])
         ship_length.pop(0)
         for coord in ship_coords:
-            grid2[coord] = (225, 225, 225)
+            grid2[coord] = (0, 0, 225)
 
         ship_coordinates[f"ship{count}"] = ship_coords
-        if "ship6" in ship_coordinates:
-            ship_coordinates["mine"] = ship_coordinates["ship6"]
-            del ship_coordinates["ship6"]
-            grid2[ship_coordinates["mine"]] = (0, 0, 0)
-            
-    return ship_coordinates
+    return ship_coordinates, grid2
