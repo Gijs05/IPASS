@@ -27,5 +27,7 @@ def guess(grid_colors, ships, previous):
         if coord in previous:
             horizontal.remove(coord)
     most_common = Counter(horizontal).most_common(1)[0][0]
-    return most_common
+    previous.append(most_common)
+    return most_common, previous
+
 

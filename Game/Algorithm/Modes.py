@@ -6,44 +6,34 @@
 # Kijk naar de lengte van het langste schip. Probeer dan een inschatting te maken wat de beste plek is om te gokken waar de meeste mogelijkheden zouden liggen voor een hit. 
 # Elke keer als er een schip zinkt haal een schip uit de dict
 
-import HuntingMode
-import TargetMode
+import Algorithm.TargetMode as Target
+import Algorithm.HuntingMode as Hunting
 import copy
 
-POSSIBLE = None
-PREVIOUS_WAY = None
-HIT = False
-SINKING = False
+def choose_mode(result, grid_colors, previous, ships, var_modes):
+    if result or var_modes["sinking"]:
+        var_modes["sinking"] = True
+        if var_modes["hit"] == False:
+            var_modes["possible"] = Hunting.get_all_possibilities(previous[-1], grid_colors)
+            var_modes["hit"] = True
+            max_value = len(max(var_modes["possible"][0].values()))
 
-def choose_mode(result, grid_colors, ships, previous):
-    global POSSIBLE, HIT, SINKING
+            for name, value in var_modes["possible"][0].items():
+                if len(value) == max_value:
+                    if name[0] == 0:
+                        var_modes["original_way"] = var_modes["possible"][1]
+                        var_modes["reserve_way"] = var_modes["possible"][2]
+                    elif name[1] == 0:
+                        var_modes["original_way"] = var_modes["possible"][2]
+                        var_modes["reserve_way"] = var_modes["possible"][1]
 
-    if result or SINKING:
-        SINKING = True
-        if HIT == False:
-            POSSIBLE = HuntingMode.get_all_possibilities(previous[-1], grid_colors)
-            HIT = True
-        print(POSSIBLE)
-        # if result:
-        #     HuntingMode.guess(POSSIBLE)
-
-        
-
-
-    # if sinking:
-    #    if result:
-    #         new_guess = HuntingMode.guess(previous, grid_colors, result, possible)
-    #         new_possible = new_guess[1]
-    #         [possible.append(new) for new in new_possible]
-    #         return new_guess[0], possible
-       
-    #    else:
-    #        new_guess = HuntingMode.guess(previous, grid_colors, result, possible)
-    #        return new_guess[0], new_guess[1]
-
-    elif SINKING == False:
-       return TargetMode.guess(grid_colors, ships, previous)
-
+        guess_info = Hunting.guess(var_modes["original_way"], var_modes["reserve_way"], var_modes["index"], previous, result)  
+        guess, var_modes["original_way"], previous, var_modes["index"] = guess_info
+        return (guess, previous), var_modes
+    
+    elif var_modes["sinking"] == False:
+       return Target.guess(grid_colors, ships, previous), var_modes
+    
 def remove_ships(old_ships, coordinate):
     sink = False
     copy_ships = copy.deepcopy(old_ships)
@@ -55,5 +45,10 @@ def remove_ships(old_ships, coordinate):
     for name in old_ships.keys():
         if len(copy_ships[name]) != len(old_ships[name]) and len(old_ships[name]) == 0:
             sink = True
-    return old_ships, sink
-
+    for ending in old_ships.values():
+        if len(ending) != 0:
+            end = False
+            break
+        else:
+            end = True
+    return old_ships, sink, end
