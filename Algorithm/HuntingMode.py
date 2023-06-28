@@ -122,12 +122,6 @@ def guess(possibilities, reserve, index, previous, result):
             - index (int): The updated index for selecting the next guess.
     """
     possibilities = [row for row in possibilities if len(row) != 0]
-    print("pos")
-    print(possibilities)
-    print("reserve")
-    print(reserve)
-    print("index")
-    print(index)
     if index == None:
         max_value = max(possibilities)
         index = possibilities.index(max_value)  

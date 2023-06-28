@@ -42,7 +42,7 @@ class Ship:
             bool: True if the ship collides with another ship after rotation, False otherwise.
         """
         self.rect.width, self.rect.height = self.rect.height, self.rect.width
-        max_x = 11 * square_size - self.rect.width
+        max_x = 10 * square_size - self.rect.width
         max_y = 10 * square_size - self.rect.height
         self.rect.x = max(0, min(self.rect.x, max_x) + 10)
         self.rect.y = max(0, min(self.rect.y, max_y) + 10)

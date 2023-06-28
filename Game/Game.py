@@ -218,7 +218,7 @@ def start_game():
         reset_button.button_event(event, coordinates)
 
         if reset_button.reset:
-            (human_previous, alg_previous, turn, result, end, coordinates,
+            (human_previous, alg_previous, turn, result, end, coordinates, changed_coords_hum, changed_coords_alg,
             start_button, reset_button, mine, var_modes, grid2, ships, alg_ships, human_ships, alg_mine) = reset_variables(grid_size, resolution, line_width)
             grid_colors = {(col, row): (50, 50, 50) for row in range(21) for col in range(grid_size[1])}
         
